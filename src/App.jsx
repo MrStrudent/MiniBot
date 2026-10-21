@@ -7,15 +7,41 @@ import RoboEyesControl from './components/RoboEyesControl';
 
 function App() {
  
-//expresion simulada
+//Mood a seleccionar
   const [mood, setMood] = useState('DEFAULT');
+
+  //ultimo mood aplicado
+  const [appliedModd, setAppliedMood] = useState(null);
+  //Resultado de la ultima operacion
+  const [commandStatus, setCommandStatus] = useState(
+    'Sin ordenes'
+  );
+  //ordenes simuladas
+  const [commandCount, setCommandCount] = useState(0);
   //estado simulado del robot
   const [robotStatus, setRobotStatus] = useState('En espera');
+  //Seleccionar expresion
   function changeMood(newMood){
     setMood(newMood);
-    setRobotStatus('Orden simulada');
+    if(newMood !== appliedModd){
+      setCommandStatus('Pendiente de envio');
+    }else{
+      setCommandStatus('Sin cambios pendientes');
+    }
   }
   
+  function sendCommand(){
+    setCommandStatus('Procesando orden...');
+    //simulacion de que la orden se completo
+    setAppliedMood(mood);
+    setCommandStatus('Completada');
+    setCommandCount(previous => previous + 1);
+  }
+
+  //Reestablecer la seleccion a default
+  function resetMood(){
+    changeMood('DEFAULT');
+  }
   
 
   return (
@@ -50,25 +76,29 @@ function App() {
         <section className="stats">
           
           <StatusCard
-          title="Estado del robot"
-          value={robotStatus}
-          description="Simulacion local" />
-
-          <StatusCard
-          title="Mood actual"
+          title="Orden seleccionada"
           value={mood}
-          description="Expresion seleccionada" />
+          description="Expresion deseada" />
 
           <StatusCard
-          title="Conectividad"
-          value="Desconectado"
-          description="Servidor aun no configurado" />
+          title="Ultima orden aplicada"
+          value={appliedModd ?? 'Ninguna'}
+          description="Resultado de la simulacion" />
+
+          <StatusCard
+          title="Ordenes completadas"
+          value={commandCount}
+          description="Contador local" />
 
         </section>
 
         <RoboEyesControl
         mood={mood}
-        onMoodChange={changeMood} />
+        appliedMood={appliedModd}
+        commandStatus={commandStatus}
+        onMoodChange={changeMood}
+        onSendCommand={sendCommand}
+        onReset={resetMood} />
 
           <article className="stat-card">
             <p>Mood actual</p>

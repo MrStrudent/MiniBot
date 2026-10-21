@@ -1,4 +1,9 @@
-function RoboEyesControl({mood, onMoodChange}){
+function RoboEyesControl({mood, 
+                          appliedMood,
+                          commandStatus,
+                          onMoodChange,
+                          onSendCommand,
+                          onReset,}){
   //expresiones disponibles
   const moods = [
     'DEFAULT',
@@ -6,7 +11,7 @@ function RoboEyesControl({mood, onMoodChange}){
     'TIRED',
     'ANGRY',
   ];
-   
+   const hasPendingChanges = mood !== appliedMood;
   return(
      <section className="control-panel">
           <div className="section-heading">
@@ -47,9 +52,34 @@ function RoboEyesControl({mood, onMoodChange}){
               </button>
             ))}
           </div>
+          
+          <div className="command-summary">
+            <p>Estado de orden</p>
+            <h3>{commandStatus}</h3>
+            <p>Ultimo mood aplicado: {' '}
+              {appliedMood ?? 'Ninguno'}
+            </p>
+          </div>
+
+          <div className="command-actions">
+            <button
+            className="send-button"
+            onClick={onSendCommand}
+            disabled={!hasPendingChanges}>
+              Enviar orden
+            </button>
+
+            <button
+            className="reset-button"
+            onClick={onReset}>
+              Reiniciar
+            </button>
+          </div>
+
           <p className="notice">
             Cambios locales, no envia a esp32-S3
           </p>
+          
         </section>
 
         
