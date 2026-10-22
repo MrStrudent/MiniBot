@@ -1,10 +1,10 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 
 import Sidebar from './components/Sidebar';
 import StatusCard from './components/StatusCard';
 import RoboEyesControl from './components/RoboEyesControl';
-
+import { checkServer } from './services/robotService';
 function App() {
  
 //Mood a seleccionar
@@ -42,7 +42,17 @@ function App() {
   function resetMood(){
     changeMood('DEFAULT');
   }
-  
+  const [serverStatus, setServerStatus] = useState('Comprobando...');
+
+  useEffect(() => {
+    checkServer()
+      .then(() =>{
+        setServerStatus('Servidor conectado');
+      })
+      .catch(() =>{
+        setServerStatus('Servidor desconectado');
+      });
+  }, []);
 
   return (
     <div className="dashboard">
@@ -90,6 +100,11 @@ function App() {
           value={commandCount}
           description="Contador local" />
 
+          <StatusCard
+            title="Servidor Flask"
+            value={serverStatus}
+            description="Comunicacion con el backend" />
+            
         </section>
 
         <RoboEyesControl

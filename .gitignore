@@ -17,10 +17,33 @@ dist-ssr
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
-.idea
+.idea/
 .DS_Store
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+Thumbs.db
+
+#Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+#Entorno virtual
+venv/
+.venv/
+env/
+
+#Variables secretas
+.env
+*.env
+instance/
+
+#Base de datos local
+*.db
+*.sqlite3
+
+#logs
+*.log
